@@ -1,25 +1,43 @@
 import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
+  const { user, signOutUser } = useAuth();
+  const {cart, isPending, error} = useCart();
+  console.log(cart);
+  if (isPending) {
+    return <> Loading ...</>;
+  }
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {})
+      .then((error) => {
+        console.log(error);
+      });
+  };
+
   const navOptions = (
     <ul style={{ display: "flex ", gap: "8px" }}>
       <li
         style={{
-          backgroundColor: "yellow ",
+          // backgroundColor: "yellow ",
           borderRadius: "5px",
           color: "black",
         }}
       >
-        <NavLink to="/">Home</NavLink>
+        <NavLink className={{ backgroundColor: "bg-yellow-300" }} to="/">
+          Home
+        </NavLink>
       </li>
       <li
         style={{
-          backgroundColor: "yellow ",
+          // backgroundColor: "yellow ",
           borderRadius: "5px",
           color: "black",
         }}
-      >
-      </li>
+      ></li>
       {/* <li
         style={{
           backgroundColor: "yellow ",
@@ -31,26 +49,66 @@ const Navbar = () => {
       </li> */}
       <li
         style={{
-          backgroundColor: "yellow ",
+          // backgroundColor: "yellow ",
           borderRadius: "5px",
           color: "black",
         }}
       >
-        <NavLink to="/menu">Our Menu</NavLink>
+        <NavLink className={{ backgroundColor: "bg-yellow-300" }} to="/menu">
+          Our Menu
+        </NavLink>
       </li>
-      {/* <li
+      <li
+        style={{
+          // backgroundColor: "yellow ",
+          borderRadius: "5px",
+          color: "black",
+        }}
+      >
+        <NavLink
+          className={{ backgroundColor: "bg-yellow-300" }}
+          to="/order-food"
+        >
+          Order Food
+        </NavLink>
+      </li>
+      <li
+        style={{
+          // backgroundColor: "yellow ",
+          borderRadius: "5px",
+          color: "black",
+        }}
+      >
+        <NavLink
+          className={{ backgroundColor: "bg-yellow-300" }}
+          to="/ordered-food"
+        >
+          My Order
+        </NavLink>
+      </li>
+      <li
         style={{
           backgroundColor: "yellow ",
           borderRadius: "5px",
           color: "black",
+          fontSize: "20px",
         }}
       >
-        <NavLink>Our Shop</NavLink>
-      </li> */}
+        <NavLink
+          to="/dashboard/cart"
+          className="btn bg-yellow-400 border rounded-md text-lg text-black"
+        >
+          <FaShoppingCart className="mr-1"></FaShoppingCart>
+          <div className="btn btn-sm bg-yellow-400 border rounded-md text-lg text-black">
+            +{cart.length}
+          </div>
+        </NavLink>
+      </li>
     </ul>
   );
+
   return (
-    <div className="navbar bg-base-100 fixed z-10 opacity-80 max-w-6xl mx-auto text-white">
+    <div className="navbar bg-base-100 fixed z-10 opacity-95 max-w-6xl mx-auto text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -84,9 +142,22 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{navOptions}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn bg-[#F3C522] text-[#800080] hover:bg-yellow-300">
-          Login
-        </a>
+        {user?.email ? (
+          <Link
+            onClick={handleSignOut}
+            to="/login"
+            className="btn bg-[#F3C522] text-[#800080] hover:bg-yellow-300"
+          >
+            Sign Out
+          </Link>
+        ) : (
+          <Link
+            to="/login"
+            className="btn bg-[#F3C522] text-[#800080] hover:bg-yellow-300"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
