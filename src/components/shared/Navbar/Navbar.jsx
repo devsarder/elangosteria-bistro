@@ -6,7 +6,7 @@ import useCart from "../../../hooks/useCart";
 const Navbar = () => {
   const { user, signOutUser } = useAuth();
   const {cart, isPending, error} = useCart();
-  console.log(cart);
+  // console.log(cart);
   if (isPending) {
     return <> Loading ...</>;
   }

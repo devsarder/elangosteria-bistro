@@ -7,10 +7,11 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
+import useAdmin from "../../hooks/useAdmin";
 
 const DashBoard = () => {
   // TODO:Admin will come from database
-  const isAdmin = true;
+  const { isAdmin } = useAdmin();
   return (
     <div className="flex ">
       {/*content  sidebar  */}
@@ -23,7 +24,7 @@ const DashBoard = () => {
             </li>
             <li className="btn btn-outline btn-md btn-primary">
               <FaUtensils></FaUtensils>
-              <NavLink to="/dashboard/items">Add Items</NavLink>
+              <NavLink to="/dashboard/addItems">Add Items</NavLink>
             </li>
             <li className="btn btn-outline btn-md btn-primary">
               <FaBook></FaBook>
