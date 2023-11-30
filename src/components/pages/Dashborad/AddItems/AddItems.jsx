@@ -1,8 +1,37 @@
 import SectionTittle from "../../../shared/SectionTittle/SectionTittle";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../../hooks/useSecureAxios";
+
+const image_hosting_key = "58eff323c039f7e4f98003b4e4e29726";
+console.log(image_hosting_key);
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 const AddItems = () => {
+  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    // UPLOAD IMAGE  TO THE IMAGEBB AND THEN GET THE URL
+    console.log(data);
+    const image_file = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, image_file, {
+      headers: { "content-type": "multipart/form-data" },
+    });
+    console.log(res.data);
+    // UPLOAD IMAGE URL TO THE SERVER
+    const item = {
+      name: data.name,
+      recipe: data.recipe,
+      category: data.category,
+      image: res.data.display_url,
+    };
+    if (res.data.success) {
+      axiosSecure.post("/menu", item).then((res) => {
+        console.log(res.data);
+      });
+    }
+  };
+
   return (
     <div>
       <div>
@@ -33,10 +62,11 @@ const AddItems = () => {
                   <span className="label-text">Recipe name*</span>
                 </label>
                 <select
+                  defaultValue={"value"}
                   {...register("category")}
                   className="select select-bordered w-full "
                 >
-                  <option disabled selected>
+                  <option disabled value={"default"}>
                     Select a category
                   </option>
                   <option value={"salad"}>Salad</option>
@@ -77,7 +107,7 @@ const AddItems = () => {
               <div className="form-control w-full">
                 <input
                   type="file"
-                  {...register('image')}
+                  {...register("image")}
                   className="file-input file-input-bordered w-full max-w-xs"
                 />
               </div>

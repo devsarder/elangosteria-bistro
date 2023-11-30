@@ -8,10 +8,12 @@ import {
 } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
+import useCart from "../../hooks/useCart";
 
 const DashBoard = () => {
   // TODO:Admin will come from database
   const { isAdmin } = useAdmin();
+  const { cart } = useCart();
   return (
     <div className="flex ">
       {/*content  sidebar  */}
@@ -39,7 +41,7 @@ const DashBoard = () => {
           <>
             <li className="btn btn-outline btn-md btn-primary">
               <FaHome></FaHome>
-              <NavLink to="/dashboard/cart">User Home </NavLink>
+              <NavLink to="/dashboard/userHome">User Home </NavLink>
             </li>
             <li className="btn btn-outline btn-md btn-primary">
               <FaUtensils></FaUtensils>
@@ -47,7 +49,7 @@ const DashBoard = () => {
             </li>
             <li className="btn btn-outline btn-md btn-primary">
               <FaBook></FaBook>
-              <NavLink to="/dashboard/cart"> My cart ()</NavLink>
+              <NavLink to="/dashboard/cart"> My cart ({cart.length})</NavLink>
             </li>
             <li className="btn btn-outline btn-md btn-primary">
               <FaUser></FaUser>
